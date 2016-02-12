@@ -31,6 +31,6 @@ func (mm *MultiMutex) Lock(key string) (unlock func()) {
 
 func (mm *MultiMutex) RLock(key string) (unlock func()) {
 	m := mm.Get(key)
-	m.Lock()
-	return m.Unlock
+	m.RLock()
+	return m.RUnlock
 }

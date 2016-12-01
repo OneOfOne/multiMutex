@@ -3,6 +3,8 @@ package multiMutex
 import (
 	"runtime"
 	"sync"
+
+	"github.com/OneOfOne/xxhash"
 )
 
 type MultiMutex struct {
@@ -20,7 +22,8 @@ func NewSize(sz int) *MultiMutex {
 }
 
 func (mm *MultiMutex) Get(key string) *sync.RWMutex {
-	return &mm.ms[modDjb2(key)%len(mm.ms)]
+	idx := xxhash.ChecksumString64(key) % uint64(len(mm.ms))
+	return &mm.ms[idx]
 }
 
 func (mm *MultiMutex) Lock(key string) (unlock func()) {
